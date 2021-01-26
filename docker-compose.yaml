@@ -85,7 +85,7 @@ services:
 
         # Websockets Server
         websockets:
-                image: codemonkey076/php7.4-alpine:1.0
+                image: codemonkey076/laravel:1.0.0
                 container_name: websockets
                 depends_on:
                         - app
@@ -101,7 +101,7 @@ services:
 
         # Horizon Server
         horizon:
-                image: codemonkey076/php7.4-alpine:1.0
+                image: codemonkey076/laravel:1.0.0
                 container_name: horizon
                 depends_on:
                         - app
