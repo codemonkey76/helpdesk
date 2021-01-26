@@ -36,7 +36,8 @@ services:
                         - 443:443
                 volumes:
                         - ./:/var/www/html
-                        - ./nginx/conf.d/:/etc/nginx/conf.d/
+                        - ./nginx/sites/app.prod.conf:/etc/nginx/conf.d/app.prod.conf
+                        - ./nginx/sites/websockets.prod.conf:/etc/nginx/conf.d/websockets.prod.conf
                         - ./nginx/ssl/:/etc/nginx/ssl/
                 networks:
                         - helpdesk
