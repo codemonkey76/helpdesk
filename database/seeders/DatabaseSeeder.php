@@ -11,6 +11,7 @@ use App\Models\Domain;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Group;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -22,24 +23,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Organization::truncate();
         Company::truncate();
         User::truncate();
         Contact::truncate();
         Group::truncate();
         GroupUser::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        // Create groups
         $accounts = Group::create(['name' => 'accounts']);
         $support = Group::create(['name' => 'support']);
         $sales = Group::create(['name' => 'sales']);
 
+        // Setup default Organization and Company
         $org = Organization::create([
-            'name' => 'ASG Communications'
+            'id' => 1,
+            'name' => 'Unassigned Organization'
         ]);
 
         $company = Company::create([
+            'id' => 1,
             'organization_id' => $org->id,
-            'name' => 'ASG Communications',
+            'name' => 'Unassigned Company',
+        ]);
+
+        $org->head_office_id = $company->id;
+        $org->save();
+
+
+        // Setup Alpha IT Centre
+        $ait_org = Organization::create([
+            'name' => 'Alpha IT Centre'
+        ]);
+
+        $ait = Company::create([
+            'organization_id' => $ait_org->id,
+            'name' => 'Alpha IT Centre',
             'address' => '1/48 Lillian Ave',
             'suburb' => 'Salisbury',
             'state' => 'QLD',
@@ -47,43 +68,47 @@ class DatabaseSeeder extends Seeder
             'phone' => '07 3277 3636'
         ]);
 
-        $org->head_office_id = $company->id;
-        $org->save();
+        $ait_org->head_office_id = $ait->id;
+        $ait_org->save();
 
-        $user = User::create([
+        $shane = User::create([
             'email' => 'shane@alphasg.com.au',
             'email_verified_at' => now(),
             'first_name' => 'Shane',
             'last_name' => 'Poppleton',
             'mobile' => '0400 588 588',
             'password' => Hash::make('secret'),
-            'company_id' => $company->id,
+            'company_id' => $ait->id,
             'remember_token' => \Str::random(10),
             'api_token' => \Str::random(60)
         ]);
 
-        $user->groups()->attach([$accounts->id, $support->id]);
+        $shane->groups()->attach([$support->id]);
 
+        $len = User::create([
+            'email' => 'len@alphasg.com.au',
+            'email_verified_at' => now(),
+            'first_name' => 'Len',
+            'last_name' => 'Groves',
+            'mobile' => '0438 711 559',
+            'password' => Hash::make('secret'),
+            'company_id' => $ait->id,
+            'remember_token' => \Str::random(10),
+            'api_token' => \Str::random(60)
+        ]);
+        $len->groups()->attach([$sales->id, $support->id]);
 
-        Organization::factory(10)->create();
-        Organization::each(function ($org) {
-            Domain::factory(mt_rand(1, 3))->create(['organization_id' => $org->id]);
-            Company::factory(mt_rand(1, 5))->create(['organization_id' => $org->id]);
-        });
-
-        Company::each(function ($company) {
-            Contact::factory(mt_rand(1, 5))->create(['company_id' => $company->id]);
-            User::factory()->create(['company_id' => $company->id]);
-        });
-
-        User::each(fn($user) => User::inRandomOrder()
-            ->where('id', '!=', $user->id)
-            ->limit(mt_rand(1, 5))
-            ->each(fn($recipient) => Message::factory(mt_rand(1, 3))->create([
-                'from_user_id' => $user->id,
-                'to_user_id' => $recipient->id
-            ])
-            )
-        );
+        $theresa = User::create([
+            'email' => 'theresa@alphasg.com.au',
+            'email_verified_at' => now(),
+            'first_name' => 'Theresa',
+            'last_name' => 'Groves',
+            'mobile' => '0438 717 559',
+            'password' => Hash::make('secret'),
+            'company_id' => $ait->id,
+            'remember_token' => \Str::random(10),
+            'api_token' => \Str::random(60)
+        ]);
+        $theresa->groups()->attach([$accounts->id, $support->id]);
     }
 }

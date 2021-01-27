@@ -40,7 +40,31 @@ window.axios.interceptors.request.use(
     error => {
         return Promise.reject(error);
     }
-)
+);
+
+import Swal from 'sweetalert2';
+
+window.axios.interceptors.response.use(response => {
+    return response;
+}, error => {
+   if (401 === error.response.status) {
+       Swal.fire({
+           title: 'Session Expired',
+           text: 'Your session has expired, would you like to be redirected to the login page?',
+           type: 'warning',
+           showCancelButton: true,
+           confirmButtonColor: '#dd6b55',
+           confirmButtonText: 'Yes',
+           closeOnConfirm: false
+       }).then(result => {
+           if (result.isConfirmed) {
+               window.location = '/login';
+           }
+       });
+   }  else {
+       return Promise.reject(error);
+   }
+});
 
 import Echo from "laravel-echo"
 
@@ -52,9 +76,8 @@ window.Echo = new Echo({
     wsHost: 'socket.' + window.location.hostname,
     wsPort: 6001,
     wssPort: 6001,
-    forceTLS: false,
     disableStats: true,
-    forceTLS: true,
-    enabledTransports: ['ws', 'wss],
+    forceTLS: false,
+    enabledTransports: ['ws', 'wss'],
     encrypted: false
 });

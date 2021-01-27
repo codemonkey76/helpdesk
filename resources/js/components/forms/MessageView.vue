@@ -34,7 +34,7 @@
                     <div v-show="showModal"
                          class="relative z-10 inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full sm:p-6"
                          role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                        <div class="flex -m-6 mb-2 py-2 border-b border-gray-200"> <!-- Header -->
+                        <div class="flex -m-6 mb-2 py-2 border-b border-gray-200">
                             <i v-if="sent"
                                class="far fa-inbox-out fa-3x mx-2 text-red-400 group-hover:text-red-500"></i>
                             <i v-else

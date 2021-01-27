@@ -11,6 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 mix.js('resources/js/app.js', 'public/js')
+    .sourceMaps()
     .vue()
     .copyDirectory('resources/images', 'public/images')
     .copyDirectory('resources/sounds', 'public/sounds')
@@ -18,4 +19,7 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss')
     ]);
+if (mix.inProduction()) {
+    mix.version();
+}
 

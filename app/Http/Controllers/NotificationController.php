@@ -13,6 +13,8 @@ class NotificationController extends Controller
 
     public function update($id)
     {
+        Log::info('Updating Notification ID: ' . $id);
+
         Auth::user()
             ->unreadNotifications()
             ->where('id', $id)
