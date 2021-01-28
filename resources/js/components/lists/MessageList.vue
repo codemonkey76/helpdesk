@@ -15,13 +15,19 @@
                             <th class="px-3 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Message
                             </th>
+                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Open
+                            </th>
+                            <th class="px-3 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Archive
+                            </th>
                             <th class="px-3 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Date / Time
                             </th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <message @click.native="messageClicked(message.id)" v-for="(message,key) in groupedMessages[page]" :key="key" :message="message"></message>
+                            <message v-for="(message,key) in groupedMessages[page]" :key="key" :message="message"></message>
                         </tbody>
                     </table>
                     <paginator :per-page="per_page" v-model="page" :total-records="totalRecords" :max-page="maxPage"></paginator>

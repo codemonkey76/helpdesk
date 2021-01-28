@@ -43,7 +43,7 @@
                                 <div class="text-gray-500">Message {{ direction }} <strong>{{user}}</strong> <i v-text="when"></i></div>
                             </div>
                         </div>
-                        <div class="max-w-2xl mt-4 text-gray-500 border rounded p-2 trix-editor" v-html="html" />
+                        <editor class="mt-2" v-model="html" :read-only="true"></editor>
 
                         <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                             <button @click="close"

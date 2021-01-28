@@ -6,8 +6,7 @@ export default {
         state.notifications.unshift(notification);
     },
     REMOVE_NOTIFICATION(state, id) {
-        let index = state.notifications.indexOf(x => x.id === id);
-        state.notifications.splice(index, 1);
+        state.notifications = state.notifications.filter((value) => value.id !== id);
     }
 
 };

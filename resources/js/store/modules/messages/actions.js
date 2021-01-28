@@ -16,7 +16,15 @@ export default {
             .then(response => {
                 commit('SET_MESSAGES', response.data);
             }).catch(error => {
-            console.log(error)
+            console.error(error)
         });
     },
+    ARCHIVE_MESSAGE({commit}, id) {
+        axios.post('/api/messages/' + id + '/archive')
+            .then(response => {
+                commit('ARCHIVE_MESSAGE', id);
+            }).catch(error => {
+                console.error(error);
+        })
+    }
 };

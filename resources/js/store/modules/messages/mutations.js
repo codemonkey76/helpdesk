@@ -9,5 +9,8 @@ export default {
             message.direction = 'sent';
 
         state.messages.unshift(message);
+    },
+    ARCHIVE_MESSAGE(state, id) {
+        state.messages = state.messages.filter(message => message.id !== id);
     }
 };

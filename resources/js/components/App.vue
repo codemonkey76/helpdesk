@@ -49,7 +49,7 @@ export default {
             .notification((notification) => {
                 this.ADD_TO_NOTIFICATIONS(notification);
                 this.INCREMENT_NOTIFICATION_COUNT();
-                if (notification.type === 'App\\Notifications\\MessageReceivedNotification') {}
+                if (notification.type === 'App\\Notifications\\MessageReceivedNotification')
                     this.$toast.open('Message received from ' + notification.data.fromUser);
             });
 

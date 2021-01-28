@@ -12,7 +12,7 @@
         <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
             <a href="#" @click="markAsRead()"
                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                <i class="fas fa-eye"></i>
+                <icon name="eye" />
             </a>
         </td>
     </tr>
@@ -26,6 +26,8 @@ export default {
     methods: {
         ...mapActions('notifications', ['MARK_AS_READ']),
         markAsRead() {
+            console.log('Marking notification as read: ' + this.notification.id);
+            console.log('Notification Data: ' + this.notification.data);
             this.MARK_AS_READ(this.notification.id);
 
         }
@@ -38,7 +40,6 @@ export default {
         messageText() {
             switch (this.notification.type) {
                 case "App\\Notifications\\MessageReceivedNotification":
-                    console.assert(this.notification.notifiable_type === "App\\Models\\User");
                     return `Message from  ` +
                         this.notification.data.fromUser +
                         ` <a href="/messages/` +

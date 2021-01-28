@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\MessagesIndexConfigurator;
+use App\Scopes\NotArchivedScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +28,12 @@ class Message extends Model
             ],
         ]
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new NotArchivedScope);
+    }
+
     protected $appends = ['fromUser', 'toUser', 'bodyExcerpt'];
     public function toSearchableArray()
     {
@@ -58,5 +65,11 @@ class Message extends Model
     public function to()
     {
         return $this->belongsTo(User::class, 'to_user_id');
+    }
+    public function archive() {
+        $this->update(['archived' => true]);
+    }
+    public function unarchive() {
+        $this->update(['archived' => false]);
     }
 }

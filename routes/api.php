@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessageArchiveController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageSearchController;
 use App\Http\Controllers\NotificationController;
@@ -10,6 +11,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
+
+    Route::post('/messages/{message}/archive', [MessageArchiveController::class, 'store']);
+    Route::delete('/messages/{message}/archive', [MessageArchiveController::class, 'destroy']);
 
     Route::get('/search/messages', [MessageSearchController::class, 'index']);
 

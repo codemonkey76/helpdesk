@@ -6,10 +6,10 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import {routes} from './routes';
 import App from './components/App';
+
 import moment from 'moment-timezone/builds/moment-timezone-with-data';
 
 Vue.prototype.$moment = moment;
-
 moment.tz.setDefault("Australia/Brisbane");
 
 Vue.use(VueRouter);
@@ -40,6 +40,7 @@ Vue.component('multi-select', MultiSelect);
 
 const files = require.context('./', true, /\.vue$/i)
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+
 
 const app = new Vue({
     el: '#app',

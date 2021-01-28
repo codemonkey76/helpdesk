@@ -1,6 +1,6 @@
 <template>
-    <div class="editor">
-        <editor-menu-bar @update="$toast.open('changed')" :editor="editor" v-slot="{ commands, isActive }" v-model="value">
+    <div class="editor" @click="focusEditor">
+        <editor-menu-bar v-if="!readOnly" @update="$toast.open('changed')" :editor="editor" v-slot="{ commands, isActive }" v-model="value">
             <div class="menubar">
 
                 <button
@@ -155,6 +155,7 @@ import {
     Strike,
     Underline,
     History,
+    Placeholder
 } from 'tiptap-extensions'
 
 export default {
@@ -163,7 +164,13 @@ export default {
         EditorMenuBar,
         Icon,
     },
-    props: ['value'],
+    props: {
+        value: String,
+        readOnly: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             editor: null,
@@ -189,8 +196,16 @@ export default {
                     new Strike(),
                     new Underline(),
                     new History(),
+                    new Placeholder({
+                        emptyEditorClass: 'is-editor-empty',
+                        emptyNodeClass: 'is-empty',
+                        emptyNodeText: 'Write your message...',
+                        showOnlyWhenEditable: true,
+                        showOnlyCurrent: true
+                    })
                 ],
                 content: this.value,
+                editable: !this.readOnly,
                 onUpdate: ({ getHTML }) => {
                     this.emitAfterOnUpdate = true;
                     this.$emit('input', getHTML())
@@ -208,6 +223,21 @@ export default {
             }
             if (this.editor) this.editor.setContent(val);
         }
+    },
+    methods: {
+        focusEditor() {
+            this.editor.view.dom.focus();
+        }
     }
 }
 </script>
+<style lang="scss">
+.editor p.is-editor-empty:first-child::before {
+    content: attr(data-empty-text);
+    float: left;
+    color: #aaa;
+    pointer-events: none;
+    height: 0;
+    font-style: italic;
+}
+</style>

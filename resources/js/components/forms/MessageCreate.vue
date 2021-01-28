@@ -40,6 +40,7 @@
                                     Send Message
                                 </h3>
                                 <select-with-status ref="selectWithStatus" v-model="user"></select-with-status>
+<!--                                <html-editor></html-editor>-->
                                 <editor class="mt-2" v-model="html"></editor>
 <!--                                <vue-trix class="mt-2 text-sm text-gray-500" v-model="html"></vue-trix>-->
 
@@ -63,7 +64,9 @@
 </template>
 
 <script>
+import HtmlEditor from "../html-editor";
 export default {
+    components: {HtmlEditor},
     data() {
         return {
             showModal: false,
