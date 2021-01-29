@@ -45,7 +45,6 @@ class MessageController extends Controller
 
         $message = Message::create($request->all());
 
-        Log::info($message);
         event(new MessageCreatedEvent($message));
 
         return response('ok', 201);

@@ -1,8 +1,13 @@
 <template>
     <div class="editor" @click="focusEditor">
-        <editor-menu-bar v-if="!readOnly" @update="$toast.open('changed')" :editor="editor" v-slot="{ commands, isActive }" v-model="value">
+        <editor-menu-bar
+            v-if="!readOnly"
+            @update="$toast.open('changed')"
+            :editor="editor"
+            v-slot="{ commands, isActive }"
+            v-model="value"
+        >
             <div class="menubar">
-
                 <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.bold() }"
@@ -114,30 +119,26 @@
                     <icon name="horizontal-rule" />
                 </button>
 
-                <button
-                    class="menubar__button"
-                    @click="commands.undo"
-                >
+                <button class="menubar__button" @click="commands.undo">
                     <icon name="undo" />
                 </button>
 
-                <button
-                    class="menubar__button"
-                    @click="commands.redo"
-                >
+                <button class="menubar__button" @click="commands.redo">
                     <icon name="redo" />
                 </button>
-
             </div>
         </editor-menu-bar>
-        <editor-content class="editor__content h-64 mt-1 p-1 border rounded overflow-y-scroll" :editor="editor"></editor-content>
+        <editor-content
+            class="editor__content h-64 mt-1 p-1 border rounded overflow-y-scroll"
+            :editor="editor"
+        ></editor-content>
     </div>
 </template>
 
 <script>
-import Icon from './icon';
-import ImageUpload from './plugins/ImageUpload';
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import Icon from "./icon";
+import ImageUpload from "./plugins/ImageUpload";
+import { Editor, EditorContent, EditorMenuBar } from "tiptap";
 import {
     Blockquote,
     CodeBlock,
@@ -157,13 +158,13 @@ import {
     Underline,
     History,
     Placeholder
-} from 'tiptap-extensions'
+} from "tiptap-extensions";
 
 export default {
     components: {
         EditorContent,
         EditorMenuBar,
-        Icon,
+        Icon
     },
     props: {
         value: String,
@@ -181,43 +182,45 @@ export default {
         };
     },
     mounted() {
-        this.editor = new Editor({extensions: [
-                    new Blockquote(),
-                    new BulletList(),
-                    new CodeBlock(),
-                    new HardBreak(),
-                    new Heading({ levels: [1, 2, 3] }),
-                    new HorizontalRule(),
-                    new ListItem(),
-                    new OrderedList(),
-                    new TodoItem(),
-                    new TodoList(),
-                    new Link(),
-                    new Bold(),
-                    new Code(),
-                    new Italic(),
-                    new Strike(),
-                    new Underline(),
-                    new History(),
-                    new Placeholder({
-                        emptyEditorClass: 'is-editor-empty',
-                        emptyNodeClass: 'is-empty',
-                        emptyNodeText: 'Write your message...',
-                        showOnlyWhenEditable: true,
-                        showOnlyCurrent: true
-                    }),
+        this.editor = new Editor({
+            extensions: [
+                new Blockquote(),
+                new BulletList(),
+                new CodeBlock(),
+                new HardBreak(),
+                new Heading({ levels: [1, 2, 3] }),
+                new HorizontalRule(),
+                new ListItem(),
+                new OrderedList(),
+                new TodoItem(),
+                new TodoList(),
+                new Link(),
+                new Bold(),
+                new Code(),
+                new Italic(),
+                new Strike(),
+                new Underline(),
+                new History(),
+                new Placeholder({
+                    emptyEditorClass: "is-editor-empty",
+                    emptyNodeClass: "is-empty",
+                    emptyNodeText: "Write your message...",
+                    showOnlyWhenEditable: true,
+                    showOnlyCurrent: true
+                }),
                 new ImageUpload({
-                    uploader: (image) => {
+                    uploader: async image => {
                         return this.uploadImage(image);
                     }
                 })
-                ],
-                content: this.value,
-                editable: !this.readOnly,
-                onUpdate: ({ getHTML }) => {
-                    this.emitAfterOnUpdate = true;
-                    this.$emit('input', getHTML())
-                }});
+            ],
+            content: this.value,
+            editable: !this.readOnly,
+            onUpdate: ({ getHTML }) => {
+                this.emitAfterOnUpdate = true;
+                this.$emit("input", getHTML());
+            }
+        });
         this.editor.setContent(this.value);
     },
     beforeDestroy() {
@@ -239,20 +242,27 @@ export default {
         focusEditor() {
             this.editor.view.dom.focus();
         },
-        async uploadImage (selectedFile) {
-            console.log('running uploadImage');
+        async uploadImage(selectedFile) {
+            console.log("running uploadImage");
             if (selectedFile.size / 1024 / 1024 > this.maxFileSize) {
                 this.$toast.open({
-                    message: 'You cannot upload images larger than ' + this.maxFileSize + 'Mb',
-                    type: 'error'
+                    message:
+                        "You cannot upload images larger than " +
+                        this.maxFileSize +
+                        "Mb",
+                    type: "error"
                 });
                 return;
             }
 
-            if (!['image/jpeg', 'image/png', 'image/gif'].includes(selectedFile.type)) {
+            if (
+                !["image/jpeg", "image/png", "image/gif"].includes(
+                    selectedFile.type
+                )
+            ) {
                 this.$toast.open({
-                    message: 'Invalid file type, must be jpeg, png or gif',
-                    type: 'error'
+                    message: "Invalid file type, must be jpeg, png or gif",
+                    type: "error"
                 });
                 return;
             }
@@ -261,25 +271,34 @@ export default {
 
             // Handle Upload and return URL
             const config = {
-                headers: {'content-type': 'multipart/form-data'}
-            }
+                headers: { "content-type": "multipart/form-data" }
+            };
 
             let formData = new FormData();
-            formData.append('image', selectedFile);
+            formData.append("image", selectedFile);
 
-            axios.post('/image/upload', formData, config).then((response) => {
-                console.log('Attempting to post to controller');
+            try {
+                const response = await axios.post(
+                    "/image/upload",
+                    formData,
+                    config
+                );
+                console.log("Attempting to post to controller");
+                console.log("response:");
+                console.log(response);
+                
                 return response.data.url;
-            })
-                .catch((e) => {
-                    this.$toast.open({message: 'Some error occurred uploading the image', type: 'error'});
-                })
-                .finally(() => {
-                    this.imageUploadInProgress = false;
+            } catch (e) {
+                this.$toast.open({
+                    message: "Some error occurred uploading the image",
+                    type: "error"
                 });
+            } finally {
+                this.imageUploadInProgress = false;
+            }
         }
     }
-}
+};
 </script>
 <style lang="scss">
 .editor p.is-editor-empty:first-child::before {
