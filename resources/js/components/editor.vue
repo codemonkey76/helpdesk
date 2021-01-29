@@ -136,6 +136,7 @@
 
 <script>
 import Icon from './icon';
+import ImageUpload from './plugins/ImageUpload';
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
     Blockquote,
@@ -174,7 +175,9 @@ export default {
     data() {
         return {
             editor: null,
-            emitAfterOnUpdate: false
+            emitAfterOnUpdate: false,
+            maxFileSize: 5,
+            imageUploadInProgress: false
         };
     },
     mounted() {
@@ -202,7 +205,12 @@ export default {
                         emptyNodeText: 'Write your message...',
                         showOnlyWhenEditable: true,
                         showOnlyCurrent: true
-                    })
+                    }),
+                new ImageUpload({
+                    uploader: (image) => {
+                        return this.uploadImage(image);
+                    }
+                })
                 ],
                 content: this.value,
                 editable: !this.readOnly,
@@ -222,11 +230,53 @@ export default {
                 return;
             }
             if (this.editor) this.editor.setContent(val);
+        },
+        imageUploadInProgress() {
+            this.editor.options.editable = !this.imageUploadInProgress;
         }
     },
     methods: {
         focusEditor() {
             this.editor.view.dom.focus();
+        },
+        async uploadImage (selectedFile) {
+            console.log('running uploadImage');
+            if (selectedFile.size / 1024 / 1024 > this.maxFileSize) {
+                this.$toast.open({
+                    message: 'You cannot upload images larger than ' + this.maxFileSize + 'Mb',
+                    type: 'error'
+                });
+                return;
+            }
+
+            if (!['image/jpeg', 'image/png', 'image/gif'].includes(selectedFile.type)) {
+                this.$toast.open({
+                    message: 'Invalid file type, must be jpeg, png or gif',
+                    type: 'error'
+                });
+                return;
+            }
+
+            this.imageUploadInProgress = true;
+
+            // Handle Upload and return URL
+            const config = {
+                headers: {'content-type': 'multipart/form-data'}
+            }
+
+            let formData = new FormData();
+            formData.append('image', selectedFile);
+
+            axios.post('/image/upload', formData, config).then((response) => {
+                console.log('Attempting to post to controller');
+                return response.data.url;
+            })
+                .catch((e) => {
+                    this.$toast.open({message: 'Some error occurred uploading the image', type: 'error'});
+                })
+                .finally(() => {
+                    this.imageUploadInProgress = false;
+                });
         }
     }
 }
