@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Notifications\MessageReceivedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
@@ -32,7 +33,13 @@ class MessageController extends Controller
                 return $message;
             });
 
-        return $received->merge($sent)->sortByDesc('created_at')->flatten(1);
+        return Cache::tags(['messages'])
+        ->remember('messages.' . $id, 
+            now()->addDay(), 
+            fn() => $received
+                ->merge($sent)
+                ->sortByDesc('created_at')
+        )->flatten(1);
     }
 
     public function store(Request $request)

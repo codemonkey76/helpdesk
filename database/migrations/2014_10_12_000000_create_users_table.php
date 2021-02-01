@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('mobile')->nullable();
+            $table->boolean('is_admin')->default(false);
             $table->boolean('notification_email_unassigned_tickets')->default(false);
             $table->boolean('notification_email_assigned_tickets')->default(false);
             $table->boolean('notification_email_replies')->default(false);

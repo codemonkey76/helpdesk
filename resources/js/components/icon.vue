@@ -1,8 +1,19 @@
 <template>
-    <i class="fas" :class="'fa-' + name"></i>
+    <i :class="iconClass"></i>
 </template>
 <script>
 export default {
-    props: ['name']
+    props: {
+        name: String,
+        type: {
+            type: String,
+            default: 'fas'
+        }
+    },
+    computed: {
+        iconClass() {
+            return this.type + ' fa-' + this.name;
+        }
+    }
 }
 </script>

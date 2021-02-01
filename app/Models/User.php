@@ -29,6 +29,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+        'notification_email_unassigned_tickets' => 'boolean',
+        'notification_email_assigned_tickets' => 'boolean',
+        'notification_email_replies' => 'boolean',
+        'notification_email_messages' => 'boolean'
     ];
 
     protected $appends = ['companyName', 'unreadNotificationCount', 'fullName'];
@@ -49,6 +54,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function receivedMessages()
     {
         return $this->hasMany(Message::class, 'to_user_id');
+    }
+    public function bugs()
+    {
+        return $this->hasMany(Bug::class);
     }
     //</editor-fold>
 

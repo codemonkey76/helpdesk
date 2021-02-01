@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bug;
+use App\Models\BugStatus;
 use App\Models\GroupUser;
 use App\Models\Message;
 use Illuminate\Database\Seeder;
@@ -30,6 +32,7 @@ class DatabaseSeeder extends Seeder
         Contact::truncate();
         Group::truncate();
         GroupUser::truncate();
+        Bug::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // Create groups
@@ -37,6 +40,7 @@ class DatabaseSeeder extends Seeder
         $support = Group::create(['name' => 'support']);
         $sales = Group::create(['name' => 'sales']);
 
+    
         // Setup default Organization and Company
         $org = Organization::create([
             'id' => 1,
@@ -79,6 +83,7 @@ class DatabaseSeeder extends Seeder
             'mobile' => '0400 588 588',
             'password' => Hash::make('secret'),
             'company_id' => $ait->id,
+            'is_admin' => true,
             'remember_token' => \Str::random(10),
             'api_token' => \Str::random(60)
         ]);
@@ -110,5 +115,10 @@ class DatabaseSeeder extends Seeder
             'api_token' => \Str::random(60)
         ]);
         $theresa->groups()->attach([$accounts->id, $support->id]);
+
+        $shane->bugs()->create([
+            'title' => 'bug view dialog doesn\'t work',
+            'content' => 'go to the bug page and it shows up with no text on it'
+        ]);
     }
 }

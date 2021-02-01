@@ -7,15 +7,14 @@ export default {
             console.error(error);
         })
     },
-    MARK_AS_READ({commit}, id) {
+    MARK_AS_READ({commit, dispatch}, id) {
+        commit('REMOVE_NOTIFICATION', id);
+        commit('users/DECREMENT_NOTIFICATION_COUNT',null, {root: true});
         axios.post('/api/notifications/' + id, { _method: 'PATCH'})
-            .then(response => {
-                if (response.data === 'ok')
-                    console.log('request sent successfully');
-                commit('REMOVE_NOTIFICATION', id);
-                commit('users/DECREMENT_NOTIFICATION_COUNT',null, {root: true});
+            .then(response => {    
             }).catch(error => {
-                console.error(error);
+                this.GET_NOTIFICATIONS();
+                dispatch('users/GET_USER', null, {root:true});
         });
     }
 };

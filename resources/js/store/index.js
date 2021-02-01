@@ -5,6 +5,7 @@ import global from './modules/global';
 import users from './modules/users';
 import messages from './modules/messages';
 import notifications from './modules/notifications';
+import bugs from './modules/bugs';
 
 import createLogger from './logger';
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
         global,
         users,
         messages,
-        notifications
+        notifications,
+        bugs
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []

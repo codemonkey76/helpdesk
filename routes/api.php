@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BugController;
 use App\Http\Controllers\MessageArchiveController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageSearchController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('/bugs', [BugController::class, 'index']);
+    Route::post('/bugs', [BugController::class, 'store']);
 
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);

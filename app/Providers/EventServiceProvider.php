@@ -6,12 +6,15 @@ use App\Events\InvoicePaidEvent;
 use App\Events\MessageCreatedEvent;
 use App\Listeners\NotifyAccountsInvoicePaidListener;
 use App\Listeners\NotifyUserMessageReceivedListener;
+use App\Models\Bug;
+use App\Models\Message;
 use App\Models\User;
+use App\Observers\BugObserver;
+use App\Observers\MessageObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -40,5 +43,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         User::observe(UserObserver::class);
+        Message::observe(MessageObserver::class);
+        Bug::observe(BugObserver::class);
     }
 }

@@ -20,11 +20,11 @@ export default {
         });
     },
     ARCHIVE_MESSAGE({commit}, id) {
+        commit('ARCHIVE_MESSAGE', id);
         axios.post('/api/messages/' + id + '/archive')
             .then(response => {
-                commit('ARCHIVE_MESSAGE', id);
             }).catch(error => {
-                console.error(error);
+                this.GET_MESSAGES();
         })
     }
 };

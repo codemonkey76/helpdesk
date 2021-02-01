@@ -19,6 +19,7 @@ export default {
     },
     methods: {
         ...mapActions('users', ['GET_USER', 'GET_USERS']),
+        ...mapActions('bugs', ['GET_BUGS']),
         ...mapActions('notifications', ['GET_NOTIFICATIONS']),
 
         ...mapMutations('notifications', ['ADD_TO_NOTIFICATIONS']),
