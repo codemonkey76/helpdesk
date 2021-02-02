@@ -13,6 +13,7 @@
             window.Laravel = <?php echo json_encode([
                 'api_token' => Auth::user()->api_token,
                 'user_id' => Auth::user()->id,
+                'is_admin' => Auth::user()->is_admin
             ]); ?>
 
         </script>

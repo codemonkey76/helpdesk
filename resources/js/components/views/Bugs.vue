@@ -8,12 +8,12 @@
                 <h2 class="max-w-6xl mx-auto mt-8 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8">
                     Bugs
                 </h2>
-                <bug-list></bug-list>
+                <bug-list @open-bug="openBug"></bug-list>
                 
                 <bug-create ref="createBug"></bug-create>
 
                 <bug-view ref="viewBug"></bug-view>
-
+            
             </div>
         </main>
     </div>
@@ -22,13 +22,17 @@
 export default {
     data() {
         return {
-             action: 'bugs/REPORT_BUG'
+             action: 'bugs/REPORT_BUG',
+             test: false
         }
     },
     methods: {
         reportBugDialog() {
             this.$refs.createBug.show();
         },
+        openBug(bug) {
+            this.$refs.viewBug.show(bug);
+        }
     }
 }
 </script>

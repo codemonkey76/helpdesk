@@ -24,4 +24,14 @@ class BugController extends Controller
                     fn() => Auth::user()->bugs);
         }
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+
+        return Auth::user()->bugs()->create($validated)->refresh();
+    }
 }

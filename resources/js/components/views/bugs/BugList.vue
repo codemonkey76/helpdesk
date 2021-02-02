@@ -26,7 +26,7 @@
                 <template v-if="viewingOpen">
 
                 <template v-if="openBugs.length">
-                    <bug v-for="(bug,key) in groupedOpenBugs[openPage]" :key="key" :bug="bug"></bug>
+                    <bug v-for="(bug,key) in groupedOpenBugs[openPage]" :key="key" :bug="bug" @open-bug="openBug"></bug>
                 </template>
                 <li v-else>
                     <div class="px-4 py-4 flex items-center sm:px-6 italic text-gray-500 text-sm ">No bugs reported</div>
@@ -39,7 +39,7 @@
                 <template v-else>
 
                 <template v-if="closedBugs.length">
-                    <bug v-for="(bug,key) in groupedClosedBugs[closedPage]" :key="key" :bug="bug"></bug>
+                    <bug v-for="(bug,key) in groupedClosedBugs[closedPage]" :key="key" :bug="bug" @open-bug="openBug"></bug>
                 </template>
                 <li v-else>
                     <div class="px-4 py-4 flex items-center sm:px-6 italic text-gray-500 text-sm ">No bugs reported</div>
@@ -87,6 +87,9 @@ export default {
         },
         viewClosed() {
             this.viewingOpen = false;
+        },
+        openBug(bug) {
+            this.$emit('open-bug', bug);
         }
     },
     computed: {

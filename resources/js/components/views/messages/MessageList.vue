@@ -29,15 +29,22 @@
                         <tbody v-if="messages.length" class="bg-white divide-y divide-gray-200">                        
                                 <message v-for="(message,key) in groupedMessages[page]" :key="key" :message="message"></message>
                         </tbody>
-                        <tbody v-else>
+                        <tbody v-else class="bg-white divide-y divide-gray-200">
                             <tr class="bg-white">                            
                                 <td colspan="6" class="max-w-0 px-3 py-4 text-center italic whitespace-nowrap text-sm text-gray-900">
                                     No Messages
                                 </td>
                             </tr>
                         </tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="6">
+                                    <paginator :per-page="per_page" v-model="page" :total-records="totalRecords" :max-page="maxPage"></paginator>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
-                    <paginator :per-page="per_page" v-model="page" :total-records="totalRecords" :max-page="maxPage"></paginator>
+                    
                 </div>
             </div>
         </div>

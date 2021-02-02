@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
     SEARCH_MESSAGES({commit}, query) {
         let params = {
@@ -26,5 +28,9 @@ export default {
             }).catch(error => {
                 this.GET_MESSAGES();
         })
+    },
+    SEND_MESSAGE({commit}, message) {
+        axios.post('/api/messages')
+            
     }
 };

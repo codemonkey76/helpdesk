@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class Bug extends Model
 {
     use HasFactory;
     protected $appends = ['creator'];
+    protected $guarded = [];
 
     public function user()
     {
@@ -21,5 +23,4 @@ class Bug extends Model
     {
         return "{$this->user->first_name} {$this->user->last_name}";
     }
-   
 }
