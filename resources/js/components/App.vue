@@ -18,64 +18,72 @@ export default {
         }
     },
     methods: {
-        ...mapActions('users', ['GET_USER', 'GET_USERS']),
-        ...mapActions('bugs', ['GET_BUGS']),
-        ...mapActions('notifications', ['GET_NOTIFICATIONS']),
+        ...mapActions(['LOAD_INITIAL_DATA']),
+        ...mapActions('users', ['GET_USER']),
+        ...mapActions('companies', ['GET_COMPANIES']),
+        ...mapActions('organizations', ['GET_ORGANIZATIONS']),
 
         ...mapMutations('notifications', ['ADD_TO_NOTIFICATIONS']),
         ...mapMutations('users', ['SET_ONLINE_USERS', 'ADD_TO_ONLINE_USERS', 'REMOVE_FROM_ONLINE_USERS', 'INCREMENT_NOTIFICATION_COUNT']),
         ...mapMutations('messages', ['ADD_TO_MESSAGES']),
+        ...mapMutations('bugs', ['SET_BUGS']),
         playSound() {
             this.audio.play();
+        },
+        searchMessageResults(e) {
+            this.SET_MESSAGES(e.results);
+            this.$toast.open({message: 'Got message search results', type: 'info'});
+        },
+        searchBugResults(e) {
+            this.SET_BUGS(e.results);
+            this.$toast.open({message: 'Got bug search results', type: 'info'});
+        },
+        globalNotification(notification) {
+            this.$toast.open({message: notification.message, type: notification.type});
+            this.playSound();
+        },
+        userNotification(notification) {
+            this.ADD_TO_NOTIFICATIONS(notification);
+            this.INCREMENT_NOTIFICATION_COUNT();
+            if (notification.type === 'App\\Notifications\\MessageReceivedNotification')
+                this.$toast.open('Message received from ' + notification.data.fromUser);
+        },
+        newMessage(e) {
+            this.ADD_TO_MESSAGES(e.message);
+        },
+        userUpdated(e) {
+            this.GET_USER();
+            this.$toast.open({message: 'User has been updated, reloading', type: 'info'});
+        },
+        userLoggedIn(user) {
+            this.ADD_TO_ONLINE_USERS(user);
+            this.$toast.open(user.first_name + ' just logged in');
+        },
+        userLoggedOut(user) {
+            this.REMOVE_FROM_ONLINE_USERS(user);
+            this.$toast.open(user.first_name + ' just logged out');
+        },
+        setupEchoListeners() {
+            window.Echo.channel('global-notifications')
+                .listen('GlobalNotification', this.globalNotification);
+            window.Echo.channel('App.Models.User.' + window.Laravel.user_id + '.SearchResults')
+                .listen('SearchMessageResultsEvent', this.searchMessageResults)
+                .listen('SearchBugResultsEvent', this.searchBugResults)
+            window.Echo.private('App.Models.User.' + window.Laravel.user_id).notification(this.userNotification);
+            window.Echo.private('App.Models.Message.' + window.Laravel.user_id).listen('MessageCreatedEvent', this.newMessage);
+            window.Echo.private('App.Models.User.' + window.Laravel.user_id).listen('UserUpdatedEvent', this.userUpdated);
+
+            window.Echo.join('messaging')
+                .here(this.SET_ONLINE_USERS)
+                .joining(this.userLoggedIn)
+                .leaving(this.userLoggedOut);
         }
     },
     created() {
-        // Get the current user
-        this.GET_USER();
-
-        // Get a list of all users
-        this.GET_USERS();
-
-        // Get all the current users notifications
-        this.GET_NOTIFICATIONS();
+        this.LOAD_INITIAL_DATA();
     },
     mounted() {
-        window.Echo.channel('global-notifications')
-            .listen('GlobalNotification', (e) => {
-                this.$toast.open({message: e.message, type: e.type});
-                this.playSound();
-            });
-
-        window.Echo.private('App.Models.User.' + window.Laravel.user_id)
-            .notification((notification) => {
-                this.ADD_TO_NOTIFICATIONS(notification);
-                this.INCREMENT_NOTIFICATION_COUNT();
-                if (notification.type === 'App\\Notifications\\MessageReceivedNotification')
-                    this.$toast.open('Message received from ' + notification.data.fromUser);
-            });
-
-        window.Echo.private('App.Models.Message.' + window.Laravel.user_id)
-            .listen('MessageCreatedEvent', (e) => {
-                this.ADD_TO_MESSAGES(e.message);
-            });
-
-        window.Echo.private('App.Models.User.' + window.Laravel.user_id)
-            .listen('UserUpdatedEvent', (e) => {
-                this.GET_USER();
-                this.$toast.open({message: 'User has been updated, reloading', type: 'info'});
-            });
-
-        window.Echo.join('messaging')
-            .here((users) => {
-                this.SET_ONLINE_USERS(users);
-            }).joining((user) => {
-            this.ADD_TO_ONLINE_USERS(user);
-            this.$toast.open(user.first_name + ' just logged in');
-        }).leaving((user) => {
-            console.log(user.name);
-            this.REMOVE_FROM_ONLINE_USERS(user);
-            this.$toast.open(user.first_name + ' just logged out');
-        });
+        this.setupEchoListeners();
     },
     data() {
         return {

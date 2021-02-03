@@ -35,7 +35,7 @@ export default {
             console.error('Could not find bug.');
             return;
         }
+        
         Vue.set(state.bugs, index, bug);
-        //state.bugs[index] = bug;
     }
 };

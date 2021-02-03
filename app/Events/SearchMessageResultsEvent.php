@@ -35,10 +35,10 @@ class SearchMessageResultsEvent implements ShouldBroadcastNow
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {
-        return new Channel("App.Models.User.$this->user.MessageSearch");
+        return new Channel("App.Models.User.$this->user.SearchResults");
     }
 }

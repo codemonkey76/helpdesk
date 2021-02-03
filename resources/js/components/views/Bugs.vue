@@ -22,8 +22,7 @@
 export default {
     data() {
         return {
-             action: 'bugs/REPORT_BUG',
-             test: false
+             action: 'bugs/SEARCH_BUGS',
         }
     },
     methods: {

@@ -1,13 +1,3 @@
 <template>
-
+    <div>Companies</div>
 </template>
-
-<script>
-export default {
-name: "Companies.vue"
-}
-</script>
-
-<style scoped>
-
-</style>

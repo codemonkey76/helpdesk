@@ -26,11 +26,11 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody v-if="messages.length" class="bg-white divide-y divide-gray-200">                        
+                        <tbody v-if="messages.length" class="bg-white divide-y divide-gray-200">
                                 <message v-for="(message,key) in groupedMessages[page]" :key="key" :message="message"></message>
                         </tbody>
                         <tbody v-else class="bg-white divide-y divide-gray-200">
-                            <tr class="bg-white">                            
+                            <tr class="bg-white">
                                 <td colspan="6" class="max-w-0 px-3 py-4 text-center italic whitespace-nowrap text-sm text-gray-900">
                                     No Messages
                                 </td>
@@ -44,7 +44,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
@@ -52,19 +52,9 @@
 </template>
 
 <script>
-import {mapGetters, mapActions, mapMutations} from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
-    mounted() {
-        this.GET_MESSAGES();
-
-        window.Echo.channel('App.Models.User.' + window.Laravel.user_id + '.MessageSearch')
-            .listen('SearchMessageResultsEvent', (e) => {
-                this.SET_MESSAGES(e.results);
-                this.$toast.open({message: 'Got new search results', type: 'info'});
-            });
-
-    },
     data() {
         return {
             page: 0,
@@ -72,10 +62,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('messages', ['SET_MESSAGES']),
-        ...mapActions('messages', ['GET_MESSAGES']),
         messageClicked(id) {
-            //console.log(id);
             this.$router.push('/messages/' + id);
         }
     },
@@ -91,6 +78,5 @@ export default {
         },
         ...mapGetters('messages', ['messages'])
     }
-
 }
 </script>
