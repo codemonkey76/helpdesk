@@ -13,5 +13,16 @@ class Organization extends Model
     {
         return $this->hasMany(Domain::class);
     }
+    public function headOffice()
+    {
+        return $this->hasOne(Company::class);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Attributes">
+    public function getHeadOfficeNameAttribute()
+    {
+        return $this->headOffice->name;
+    }
     //</editor-fold>
 }

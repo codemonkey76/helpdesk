@@ -1,20 +1,20 @@
 <template>
 <create-form :show="showModal" @cancel="cancel" @confirm="sendMessage" title="Send Message">
-    
-    <label 
-        for="content" 
+
+    <label
+        for="content"
         class="block text-sm font-medium text-gray-700">
         To
     </label>
     <select-with-status ref="selectWithStatus" v-model="user"></select-with-status>
 
-    <label 
-        for="content" 
+    <label
+        for="content"
         class="mt-2 block text-sm font-medium text-gray-700">
         Content
     </label>
-    <editor 
-        id="content" 
+    <editor
+        id="content"
         v-model="content"></editor>
 
     <template #confirm>
@@ -52,14 +52,6 @@ export default {
             fd.append('to_user_id', this.user);
             fd.append('body', this.content);
             this.SEND_MESSAGE(fd);
-            axios.post('/api/messages', fd)
-                .then(response => {
-                    this.$toast.open('Message sent successfully!');
-                })
-                .catch(error => {
-                    this.$toast.open({message: 'Error occured', type: 'error'});
-                    console.log(error);
-                });
         }
     }
 }

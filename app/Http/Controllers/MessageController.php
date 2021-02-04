@@ -34,8 +34,8 @@ class MessageController extends Controller
             });
 
         return Cache::tags(['messages'])
-        ->remember('messages.' . $id, 
-            now()->addDay(), 
+        ->remember('messages.' . $id,
+            now()->addDay(),
             fn() => $received
                 ->merge($sent)
                 ->sortByDesc('created_at')

@@ -17,7 +17,7 @@ export const routes = [
     {path: '/', name: 'Dashboard', component: Dashboard},
     {path: '/directory', name: 'Directory', component: Directory},
     {path: '/tickets', name: 'Tickets', component: Tickets},
-    {path: '/organizations', name: 'Organizations', component: Organizations},
+    {path: '/organizations*', name: 'Organizations', component: Organizations},
     {path: '/companies', name: 'Companies', component: Companies},
     {path: '/contacts', name: 'Contacts', component: Contacts},
     {path: '/jobs', name: 'Jobs', component: Jobs},

@@ -5,4 +5,7 @@ export default {
                 commit('SET_ORGANIZATIONS', response.data);
             });
     },
+    CREATE_ORGANIZATION({commit}) {
+        return axios.post('/api/organizations')
+    }
 };

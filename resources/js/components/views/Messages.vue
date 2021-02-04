@@ -38,7 +38,7 @@ export default {
             this.$refs.createMessage.show();
         },
         messageId(route) {
-            if (route.params.hasOwnProperty('pathMatch')) return route.params.pathMatch.substring(1);
+                if (route.params.hasOwnProperty('pathMatch')) return route.params.pathMatch.substring(1);
             return null;
         },
         showMessage(to) {

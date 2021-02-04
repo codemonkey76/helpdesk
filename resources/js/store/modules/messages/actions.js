@@ -21,6 +21,6 @@ export default {
         });
     },
     SEND_MESSAGE({commit}, message) {
-        return axios.post('/api/messages')
+        return axios.post('/api/messages', message)
     }
 };

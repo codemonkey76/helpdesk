@@ -8,7 +8,7 @@
         </template>
 
         <template #content>
-            <organization v-for="(organization,key) in chunkedOrganizations[currentPage-1]" :key="key" :organization="organization"></organization>
+            <organization v-for="(organization,key) in chunkedOrganizations[currentPage-1]" :key="key" :organization="organization" @open-organization="openOrganization(organization)"></organization>
         </template>
 
         <template #empty>
@@ -48,7 +48,7 @@ export default {
             this.currentPage = selectedPage;
         },
         openOrganization(organization) {
-            console.log('open organization');
+            this.$emit('open-organization', organization);
         }
     },
     computed: {
