@@ -8,7 +8,7 @@
                 <h2 class="max-w-6xl mx-auto mt-8 px-4 text-lg leading-6 font-medium text-gray-900 sm:px-6 lg:px-8">
                     Messages
                 </h2>
-                <message-list></message-list>
+                <message-list v-if="messages" :messages="messages"></message-list>
                 <message-create ref="createMessage"></message-create>
                 <message-view ref="viewMessage"></message-view>
 
@@ -17,13 +17,22 @@
     </div>
 </template>
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
     data() {
         return {
-            action: 'messages/SEARCH_MESSAGES'
+            action: 'messages/SEARCH_MESSAGES',
+            messageChannel: 'App.Models.Message.' + window.Laravel.user_id,
+            searchChannel: 'App.Models.User.' + window.Laravel.user_id + '.SearchResults'
         }
+    },
+    created() {
+        this.fetchData();
+    },
+    beforeDestroy() {
+        window.Echo.private(this.messageChannel).stopListening('MessageCreatedEvent');
+        window.Echo.channel(this.searchChannel).stopListening('SearchMessageResultsEvent');
     },
     watch: {
         messages() {
@@ -34,8 +43,19 @@ export default {
         }
     },
     methods: {
+        ...mapActions('messages', ['GET_MESSAGES']),
+        ...mapMutations('messages', ['SET_MESSAGES']),
+        fetchData() {
+            this.GET_MESSAGES();
+            window.Echo.private(this.messageChannel).listen('MessageCreatedEvent', this.newMessage);
+            window.Echo.channel(this.searchChannel).listen('SearchMessageResultsEvent', this.searchMessageResults)
+        },
         sendMessageDialog() {
             this.$refs.createMessage.show();
+        },
+        searchMessageResults(e) {
+            this.SET_MESSAGES(e.results);
+            this.$toast.open({message: 'Got message search results', type: 'info'});
         },
         messageId(route) {
                 if (route.params.hasOwnProperty('pathMatch')) return route.params.pathMatch.substring(1);

@@ -26,8 +26,8 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody v-if="messages.length" class="bg-white divide-y divide-gray-200">
-                                <message v-for="(message,key) in groupedMessages[page]" :key="key" :message="message"></message>
+                        <tbody v-if="messages" class="bg-white divide-y divide-gray-200">
+                                <message v-for="(message,key) in messages.data" :key="key" :message="message"></message>
                         </tbody>
                         <tbody v-else class="bg-white divide-y divide-gray-200">
                             <tr class="bg-white">
@@ -39,7 +39,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="6">
-                                    <paginator :per-page="per_page" v-model="page" :total-records="totalRecords" :max-page="maxPage"></paginator>
+                                    <paginator @page-change="fetchData" :items="messages"></paginator>
                                 </td>
                             </tr>
                         </tbody>
@@ -52,31 +52,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 export default {
-    data() {
-        return {
-            page: 0,
-            per_page: 10
-        }
-    },
+    props: ['messages'],
     methods: {
-        messageClicked(id) {
-            this.$router.push('/messages/' + id);
+        fetchData(page) {
+            this.$store.dispatch('messages/GET_PAGINATED_MESSAGES', page);
         }
-    },
-    computed: {
-        totalRecords() {
-            return this.messages?.length
-        },
-        maxPage() {
-            return this.groupedMessages?.length;
-        },
-        groupedMessages() {
-            return _.chunk(this.messages, this.per_page);
-        },
-        ...mapGetters('messages', ['messages'])
     }
 }
 </script>

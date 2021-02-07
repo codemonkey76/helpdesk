@@ -10,7 +10,7 @@
 </template>
 <script>
 import {mapActions, mapMutations} from 'vuex';
-
+import { menus, menusAlt } from '../menus';
 export default {
     watch: {
         $route(to, from) {
@@ -70,7 +70,7 @@ export default {
                 .listen('SearchMessageResultsEvent', this.searchMessageResults)
                 .listen('SearchBugResultsEvent', this.searchBugResults)
             window.Echo.private('App.Models.User.' + window.Laravel.user_id).notification(this.userNotification);
-            window.Echo.private('App.Models.Message.' + window.Laravel.user_id).listen('MessageCreatedEvent', this.newMessage);
+
             window.Echo.private('App.Models.User.' + window.Laravel.user_id).listen('UserUpdatedEvent', this.userUpdated);
 
             window.Echo.join('messaging')
@@ -88,72 +88,10 @@ export default {
     data() {
         return {
             sidebarOpen: false,
-            menus: [
-                {
-                    route: '/',
-                    label: 'Dashboard',
-                    icon: 'fas fa-tachometer-alt'
-                },
-                {
-                    route: '/directory',
-                    label: 'Directory',
-                    icon: 'far fa-address-card'
-                },
-                {
-                    route: '/tickets',
-                    label: 'Tickets',
-                    icon: 'fas fa-ticket-alt'
-                },
-                {
-                    route: '/organizations',
-                    label: 'Organizations',
-                    icon: 'fas fa-building'
-                },
-                {
-                    route: '/companies',
-                    label: 'Companies',
-                    icon: 'fas fa-home'
-                },
-                {
-                    route: '/contacts',
-                    label: 'Contacts',
-                    icon: 'far fa-address-card'
-                },
-                {
-                    route: '/jobs',
-                    label: 'Jobs',
-                    icon: 'fas fa-tasks'
-                }, {
-                    route: '/messages',
-                    label: 'Messages',
-                    icon: 'fas fa-envelope'
-                }, {
-                    route: '/logs',
-                    label: 'Logs',
-                    icon: 'fab fa-buffer'
-                },
-                {
-                    route: '/users',
-                    label: 'Users',
-                    icon: 'fas fa-users'
-                },
-
-            ],
-            'menusAlt': [
-                {
-                    route: '/settings',
-                    label: 'Settings',
-                    icon: 'fas fa-cog'
-                },
-                {
-                    route: '/bugs',
-                    label: 'Bugs / Feature Requests',
-                    icon: 'fas fa-bug'
-                }
-            ],
+            menus,
+            menusAlt,
             audio: new Audio('/sounds/pop.mp3')
         }
-
     }
 }
 </script>

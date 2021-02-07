@@ -17,29 +17,19 @@ class MessageController extends Controller
     {
         $id = Auth::id();
 
-        $received = User::find($id)
-            ->receivedMessages
-            ->map(function ($message) {
-                $message['direction'] = 'received';
-                return $message;
-            });
+        $sent = Message::where('from_user_id', $id);
+        $from = Message::where('to_user_id', $id);
+        $messages = $from->union($sent);
 
-        $sent = User::find($id)
-            ->sentMessages()
-            ->where('to_user_id', '!=', $id)
-            ->get()
-            ->map(function ($message) {
-                $message['direction'] = 'sent';
-                return $message;
-            });
+        return $messages->paginate(10);
 
-        return Cache::tags(['messages'])
-        ->remember('messages.' . $id,
-            now()->addDay(),
-            fn() => $received
-                ->merge($sent)
-                ->sortByDesc('created_at')
-        )->flatten(1);
+//        return Cache::tags(['messages'])
+//        ->remember('messages.' . $id,
+//            now()->addDay(),
+//            fn() => $received
+//                ->merge($sent)
+//                ->sortByDesc('created_at')
+//        )->flatten(1);
     }
 
     public function store(Request $request)

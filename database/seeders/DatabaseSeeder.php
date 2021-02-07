@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         $support = Group::create(['name' => 'support']);
         $sales = Group::create(['name' => 'sales']);
 
-    
+
         // Setup default Organization and Company
         $org = Organization::create([
             'id' => 1,
@@ -120,5 +120,15 @@ class DatabaseSeeder extends Seeder
             'title' => 'bug view dialog doesn\'t work',
             'content' => 'go to the bug page and it shows up with no text on it'
         ]);
+
+        User::each(fn($user) => User::inRandomOrder()
+            ->where('id', '!=', $user->id)
+            ->limit(mt_rand(1, 5))
+            ->each(fn($recipient) => Message::factory(mt_rand(1, 3))->create([
+                'from_user_id' => $user->id,
+                'to_user_id' => $recipient->id
+            ])
+            )
+        );
     }
 }

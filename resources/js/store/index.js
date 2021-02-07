@@ -48,7 +48,7 @@ export default new Vuex.Store({
                 this.dispatch('users/GET_USERS'),
                 this.dispatch('notifications/GET_NOTIFICATIONS'),
                 this.dispatch('bugs/GET_BUGS'),
-                this.dispatch('messages/GET_MESSAGES'),
+
                 this.dispatch('organizations/GET_ORGANIZATIONS'),
                 this.dispatch('companies/GET_COMPANIES')
             ];

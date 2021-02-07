@@ -13,6 +13,16 @@ export default {
                 commit('SET_MESSAGES', response.data);
             });
     },
+    GET_PAGINATED_MESSAGES({commit}, page) {
+        return axios.get('/api/messages', {
+            params: {
+                page: page
+            }
+        })
+            .then(response => {
+                commit('SET_MESSAGES', response.data);
+            });
+    },
     ARCHIVE_MESSAGE({commit}, id) {
         commit('ARCHIVE_MESSAGE', id);
         return axios.post('/api/messages/' + id + '/archive')
