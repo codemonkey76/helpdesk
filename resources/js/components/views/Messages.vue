@@ -36,17 +36,17 @@ export default {
     },
     watch: {
         messages() {
-            this.showMessage(this.$route);
+            // this.showMessage(this.$route);
         },
         $route(to, from) {
-            this.showMessage(to);
+            // this.showMessage(to);
         }
     },
     methods: {
-        ...mapActions('messages', ['GET_MESSAGES']),
+        ...mapActions('messages', ['GET_MESSAGES', 'GET_PAGINATED_MESSAGES']),
         ...mapMutations('messages', ['SET_MESSAGES']),
         fetchData() {
-            this.GET_MESSAGES();
+            this.GET_PAGINATED_MESSAGES(1);
             window.Echo.private(this.messageChannel).listen('MessageCreatedEvent', this.newMessage);
             window.Echo.channel(this.searchChannel).listen('SearchMessageResultsEvent', this.searchMessageResults)
         },
@@ -61,25 +61,25 @@ export default {
                 if (route.params.hasOwnProperty('pathMatch')) return route.params.pathMatch.substring(1);
             return null;
         },
-        showMessage(to) {
-            if (!this.messages.length) return;
-
-            let id = this.messageId(to);
-
-            if (!id) return;
-
-            let message = this.messages.find(x => x.id === parseInt(id));
-
-            if (!message) {
-                this.$toast.open({
-                    message: 'Could not find message: ' + to.params.id,
-                    type: 'error'
-                });
-                return;
-            }
-
-            this.$refs.viewMessage.show(message);
-        }
+        // showMessage(to) {
+        //     if (!this.messages.length) return;
+        //
+        //     let id = this.messageId(to);
+        //
+        //     if (!id) return;
+        //
+        //     let message = this.messages.find(x => x.id === parseInt(id));
+        //
+        //     if (!message) {
+        //         this.$toast.open({
+        //             message: 'Could not find message: ' + to.params.id,
+        //             type: 'error'
+        //         });
+        //         return;
+        //     }
+        //
+        //     this.$refs.viewMessage.show(message);
+        // }
     },
     computed: {
         ...mapGetters('messages', ['messages'])

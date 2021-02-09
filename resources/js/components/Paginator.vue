@@ -12,6 +12,7 @@
                 results
             </p>
         </div>
+        <template v-if="items.links">
         <div v-if="items.links.length>0" class="flex-1 flex justify-between sm:justify-end">
             <button @click="prevPage()"
                          :disabled="items.links[0].active"
@@ -24,6 +25,7 @@
                         v-html="items.links[items.links.length-1].label">
             </button>
         </div>
+        </template>
     </nav>
 </template>
 <script>

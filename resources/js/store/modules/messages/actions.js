@@ -23,11 +23,9 @@ export default {
                 commit('SET_MESSAGES', response.data);
             });
     },
-    ARCHIVE_MESSAGE({commit}, id) {
-        commit('ARCHIVE_MESSAGE', id);
-        return axios.post('/api/messages/' + id + '/archive')
-            .catch(error => {
-                this.GET_MESSAGES();
+    ARCHIVE_MESSAGE({commit, dispatch}, id, page) {
+        return axios.post('/api/messages/' + id + '/archive').then(() => {
+            dispatch('GET_PAGINATED_MESSAGES', page);
         });
     },
     SEND_MESSAGE({commit}, message) {

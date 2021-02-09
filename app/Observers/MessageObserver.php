@@ -15,8 +15,8 @@ class MessageObserver
      */
     public function created(Message $message)
     {
-        Cache::tags(['messages'])->forget('messages.' . $message->from_user_id);
-        Cache::tags(['messages'])->forget('messages.' . $message->to_user_id);
+        Cache::tags(['messages.' . $message->from_user_id])->flush();
+        Cache::tags(['messages.' . $message->to_user_id])->flush();
     }
 
     /**
@@ -27,8 +27,8 @@ class MessageObserver
      */
     public function updated(Message $message)
     {
-        Cache::tags(['messages'])->forget('messages.' . $message->from_user_id);
-        Cache::tags(['messages'])->forget('messages.' . $message->to_user_id);
+        Cache::tags(['messages.' . $message->from_user_id])->flush();
+        Cache::tags(['messages.' . $message->to_user_id])->flush();
     }
 
     /**
@@ -39,7 +39,7 @@ class MessageObserver
      */
     public function deleted(Message $message)
     {
-        Cache::tags(['messages'])->forget('messages.' . $message->from_user_id);
-        Cache::tags(['messages'])->forget('messages.' . $message->to_user_id);
+        Cache::tags(['messages.' . $message->from_user_id])->flush();
+        Cache::tags(['messages.' . $message->to_user_id])->flush();
     }
 }

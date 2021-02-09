@@ -16,20 +16,16 @@ class MessageController extends Controller
     public function index()
     {
         $id = Auth::id();
+        $currentPage = request()->get('page',1);
 
         $sent = Message::where('from_user_id', $id);
         $from = Message::where('to_user_id', $id);
         $messages = $from->union($sent);
 
-        return $messages->paginate(10);
-
-//        return Cache::tags(['messages'])
-//        ->remember('messages.' . $id,
-//            now()->addDay(),
-//            fn() => $received
-//                ->merge($sent)
-//                ->sortByDesc('created_at')
-//        )->flatten(1);
+        return Cache::tags(['messages', 'messages.' . $id])
+        ->remember('messages.' . $id . '.' . $currentPage,
+            now()->addDay(),
+            fn() => $messages->paginate(10));
     }
 
     public function store(Request $request)
