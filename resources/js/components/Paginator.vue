@@ -15,13 +15,14 @@
         <template v-if="items.links">
         <div v-if="items.links.length>0" class="flex-1 flex justify-between sm:justify-end">
             <button @click="prevPage()"
-                         :disabled="items.links[0].active"
-                         class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                         :disabled="! items.links[0].active"
+                         class="disabled:opacity-50 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
                          v-html="items.links[0].label">
             </button>
             <button @click="nextPage()"
-                         :disabled="items.links[items.links.length-1].active"
-                         class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                         :disabled="! items.links[items.links.length-1].active"
+                         class="disabled:opacity-50 ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+
                         v-html="items.links[items.links.length-1].label">
             </button>
         </div>
