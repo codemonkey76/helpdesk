@@ -30,14 +30,14 @@ export default {
         playSound() {
             this.audio.play();
         },
-        searchMessageResults(e) {
-            this.SET_MESSAGES(e.results);
-            this.$toast.open({message: 'Got message search results', type: 'info'});
-        },
-        searchBugResults(e) {
-            this.SET_BUGS(e.results);
-            this.$toast.open({message: 'Got bug search results', type: 'info'});
-        },
+        // searchMessageResults(e) {
+        //     this.SET_MESSAGES(e.results);
+        //     this.$toast.open({message: 'Got message search results', type: 'info'});
+        // },
+        // searchBugResults(e) {
+        //     this.SET_BUGS(e.results);
+        //     this.$toast.open({message: 'Got bug search results', type: 'info'});
+        // },
         globalNotification(notification) {
             this.$toast.open({message: notification.message, type: notification.type});
             this.playSound();
@@ -66,9 +66,9 @@ export default {
         setupEchoListeners() {
             window.Echo.channel('global-notifications')
                 .listen('GlobalNotification', this.globalNotification);
-            window.Echo.channel('App.Models.User.' + window.Laravel.user_id + '.SearchResults')
-                .listen('SearchMessageResultsEvent', this.searchMessageResults)
-                .listen('SearchBugResultsEvent', this.searchBugResults)
+            // window.Echo.channel('App.Models.User.' + window.Laravel.user_id + '.SearchResults')
+            //     .listen('SearchMessageResultsEvent', this.searchMessageResults)
+            //     .listen('SearchBugResultsEvent', this.searchBugResults)
             window.Echo.private('App.Models.User.' + window.Laravel.user_id).notification(this.userNotification);
 
             window.Echo.private('App.Models.User.' + window.Laravel.user_id).listen('UserUpdatedEvent', this.userUpdated);

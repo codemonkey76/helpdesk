@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\CollectionHelper;
 use App\Models\Ticket;
 use App\Models\TicketEntry;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Contact;
@@ -39,9 +41,11 @@ class AppServiceProvider extends ServiceProvider
             'ticket-entry' => TicketEntry::class
         ]);
 
-
-
         // For new connections.
         Redis::enableEvents();
+
+        Collection::macro('paginate', function($pageSize) {
+            return CollectionHelper::paginate($this, $pageSize);
+        });
     }
 }
