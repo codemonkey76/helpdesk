@@ -8,26 +8,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Str;
-use ScoutElastic\Searchable;
+use Laravel\Scout\Searchable;
+
 
 class Message extends Model
 {
     use HasFactory;
     use Searchable;
 
-    protected $indexConfigurator = MessagesIndexConfigurator::class;
-    protected $searchRules = [
-
-    ];
+//    protected $indexConfigurator = MessagesIndexConfigurator::class;
+//    protected $searchRules = [
+//
+//    ];
     protected $guarded = [];
 
-    protected $mapping = [
-        'properties' => [
-            'body' => [
-                "type" => "text"
-            ],
-        ]
-    ];
+//    protected $mapping = [
+//        'properties' => [
+//            'body' => [
+//                "type" => "text"
+//            ],
+//        ]
+//    ];
 
     protected static function booted()
     {
@@ -35,12 +36,12 @@ class Message extends Model
     }
 
     protected $appends = ['fromUser', 'toUser', 'bodyExcerpt'];
-    public function toSearchableArray()
-    {
-        return [
-            'body' => $this->body
-        ];
-    }
+//    public function toSearchableArray()
+//    {
+//        return [
+//            'body' => $this->body
+//        ];
+//    }
     public function getFromUserAttribute()
     {
         return $this->from->first_name .' '. $this->from->last_name;

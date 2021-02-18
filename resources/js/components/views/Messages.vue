@@ -54,8 +54,14 @@ export default {
             this.$refs.createMessage.show();
         },
         searchMessageResults(e) {
-            this.SET_MESSAGES(e.results);
-            this.$toast.open({message: 'Got message search results', type: 'info'});
+            // console.log('Calling SET_MESSAGES mutation with results:');
+            // console.log(e.results);
+            // console.log(this);
+            // console.log('is function?', this.SET_MESSAGES, typeof this.SET_MESSAGES === 'function')
+            // this.SET_MESSAGES(e.results);
+            this.$toast.open({message: 'Message search results received', type: 'info'});
+            this.$store.commit('messages/SET_MESSAGES', e.results);
+
         },
         messageId(route) {
                 if (route.params.hasOwnProperty('pathMatch')) return route.params.pathMatch.substring(1);

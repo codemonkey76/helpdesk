@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+
 class MessageSearchController extends Controller
 {
     public function index(Request $request)
@@ -16,31 +17,15 @@ class MessageSearchController extends Controller
         $query = $request->query('query');
         $id = Auth::id();
 
-        $received = null;
-        $sent = null;
+        $message = null;
 
-        if ($query === null) {
-            $received = User::find($id)->receivedMessages->map(function ($message) {
-                $message['direction'] = 'received';
-                return $message;
-            });
-
-            $sent = User::find($id)->sentMessages->map(function ($message) {
-                $message['direction'] = 'sent';
-                return $message;
-            });
+        if (!isset($query)) {
+            $messages = Message::where('from_user_id', $id)->orWhere('to_user_id', $id)->paginate(10);
         } else {
-            $sent = Message::search('*' . $query . '*')->take(10000)->get()->where('from_user_id', $id)->map(function ($message) {
-                $message['direction'] = 'sent';
-                return $message;
-            });
-            $received = Message::search('*' . $query . '*')->take(10000)->get()->where('to_user_id', $id)->map(function ($message) {
-                $message['direction'] = 'received';
-                return $message;
-            });
+            $sent = Message::search($query)->where('from_user_id', $id)->get();
+            $received = Message::search($query)->where('to_user_id', $id)->get();
+            $messages = $sent->merge($received)->paginate(10);
         }
-
-        $messages = $sent->merge($received);
 
         event(new SearchMessageResultsEvent($messages, $id));
 
