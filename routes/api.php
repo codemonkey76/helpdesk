@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageSearchController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationNotesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     // Message routes
     Route::get('/messages', [MessageController::class, 'index']);
     Route::post('/messages', [MessageController::class, 'store']);
+    Route::get('/messages/{message}', [MessageController::class, 'show']);
 
     Route::post('/messages/{message}/archive', [MessageArchiveController::class, 'store']);
     Route::delete('/messages/{message}/archive', [MessageArchiveController::class, 'destroy']);
@@ -47,6 +49,10 @@ Route::middleware('auth:api')->group(function () {
 
     // Organization routes
     Route::get('/organizations', [OrganizationController::class, 'index']);
+
+    // Organization Notes routes
+    Route::post('/organizations/{organization}/notes', [OrganizationNotesController::class, 'store']);
+    Route::get('/organizations/{organization}/notes', [OrganizationNotesController::class, 'index']);
 
 
     // Company routes

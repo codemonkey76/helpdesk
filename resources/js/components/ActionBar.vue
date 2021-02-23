@@ -4,7 +4,7 @@
         <!-- Search bar -->
         <div class="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
             <div class="flex-1 flex">
-                <search-bar v-show="search" :placeholder="placeholder" :action="action"></search-bar>
+                <search-bar v-show="search" :placeholder="placeholder" :action="action" :options="options"></search-bar>
             </div>
             <div class="ml-4 flex items-center md:ml-6">
                 <notifications-button></notifications-button>
@@ -17,7 +17,7 @@
 <script>
 export default {
     name: "ActionBar",
-    props: ['search', 'placeholder', 'action'],
+    props: ['search', 'placeholder', 'action', 'options'],
 }
 </script>
 

@@ -8,9 +8,11 @@ use App\Listeners\NotifyAccountsInvoicePaidListener;
 use App\Listeners\NotifyUserMessageReceivedListener;
 use App\Models\Bug;
 use App\Models\Message;
+use App\Models\Note;
 use App\Models\User;
 use App\Observers\BugObserver;
 use App\Observers\MessageObserver;
+use App\Observers\NoteObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -45,5 +47,6 @@ class EventServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Message::observe(MessageObserver::class);
         Bug::observe(BugObserver::class);
+        Note::observe(NoteObserver::class);
     }
 }

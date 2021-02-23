@@ -1,14 +1,24 @@
 <template>
     <div class="pr-3 h-full text-xl overflow-y-scroll">
-        <p class="bg-white rounded-lg px-3 py-2 my-2 border shadow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vestibulum ipsum eu felis consequat feugiat. Fusce at massa eleifend tellus placerat ullamcorper dapibus ut sapien. Fusce ligula massa, tristique sit amet volutpat sed, euismod vel magna. Vestibulum non risus ut orci gravida congue. Maecenas volutpat enim id justo condimentum, condimentum semper mi maximus. Nam enim sem, ultricies id semper vitae, pharetra gravida lectus. Nulla facilisi. Sed ullamcorper nibh tortor, at pulvinar erat maximus sit amet. Curabitur non faucibus erat, eget varius eros. Quisque posuere porttitor dictum. Vestibulum sit amet dui semper, pharetra augue eu, aliquam velit. Praesent interdum odio vel quam auctor, quis pharetra orci porta. Nulla viverra aliquet eros sed rhoncus.</p>
-        <p class="bg-white rounded-lg px-3 py-2 my-2 border shadow">Integer sed ex nec orci efficitur ornare eu id nisl. Proin hendrerit, dui ut dictum dignissim, enim nunc feugiat velit, vitae imperdiet felis arcu eu purus. Vestibulum molestie, elit vel egestas sodales, enim libero cursus ante, ut faucibus sem erat eu metus. Nulla a lobortis urna. Nunc cursus elementum elit, commodo ultricies dolor congue a. Fusce sodales nunc ut nulla ornare, in rhoncus metus tincidunt. Donec rutrum metus sed est pretium dignissim. Quisque volutpat augue eu elementum iaculis. Vivamus id massa a lacus interdum facilisis. Suspendisse viverra, dui in dapibus posuere, odio metus rhoncus eros, aliquam faucibus mi erat non libero. Maecenas sodales neque risus, nec tincidunt enim bibendum ut. Nullam finibus lacus in faucibus dignissim. Nulla facilisi. Quisque vulputate mollis feugiat.</p>
-        <p class="bg-white rounded-lg px-3 py-2 my-2 border shadow">Suspendisse imperdiet urna vel nulla blandit blandit. Curabitur dignissim est a nisi tempor vehicula. Sed eget lectus tincidunt, accumsan ante eget, posuere lorem. Nulla in tellus vitae eros dictum faucibus a non velit. Aliquam dignissim nisi augue, ut consectetur lorem aliquet at. Mauris sagittis quam sit amet dui mollis iaculis. Donec tempus ornare porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lacinia turpis ac dapibus commodo. Fusce eget fringilla erat. Nulla eget neque euismod, laoreet nibh eu, egestas quam. Nunc aliquet risus eget tellus dapibus, quis mollis magna sodales. Aliquam sollicitudin sed libero ut sodales. In hac habitasse platea dictumst. Aenean ut tincidunt quam.</p>
-        <p class="bg-white rounded-lg px-3 py-2 my-2 border shadow">Aenean sollicitudin pharetra facilisis. Ut auctor, elit in finibus facilisis, arcu nunc vulputate neque, ut lobortis massa dolor eu arcu. Vestibulum malesuada pulvinar sodales. Fusce sollicitudin libero eu nulla molestie, id egestas ante luctus. Etiam sed convallis ex. Vivamus sagittis vitae tellus vel egestas. Maecenas vehicula mi vitae ante laoreet porta. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce in turpis ut nunc tristique elementum et eget dui. Etiam nec lacus ac odio ultrices egestas.</p>
-        <p class="bg-white rounded-lg px-3 py-2 my-2 border shadow">Integer sem nulla, malesuada non lobortis sit amet, porta egestas magna. Quisque efficitur nec tortor a vehicula. Nam gravida arcu sapien, eu lobortis augue bibendum in. In mattis pharetra condimentum. Morbi viverra dolor nec neque condimentum, quis imperdiet justo cursus. Integer quis eleifend tortor. Sed congue consectetur massa id semper. Nunc ac nibh metus. Curabitur quis dui dolor. Donec ac nulla eget dolor sagittis consequat quis sed neque. Quisque sagittis ante a odio cursus laoreet.</p>
+        <template v-for="(note,index) in notes.data">
+            <formatted-date :value="note.created_at" class="italic text-xs mb-1"></formatted-date>
+            <div class="relative">
+                <div class="editor__content rounded-lg bg-white shadow border px-3 py-2 pt-4 text-sm text-gray-900 mb-4"
+                     v-html="note.note"></div>
+                <div class="flex absolute top-0 right-0 mt-2 mr-2">
+                    <button title="Edit note"
+                        class="h-6 w-6 flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-yellow-500">
+                        <i class="fas fa-pencil fa-xs"></i></button>
+                    <button title="Delete note"
+                        class="h-6 w-6 flex items-center justify-center ml-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-red-500">
+                        <i class="fas fa-trash fa-xs"></i></button>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 <script>
 export default {
-
+    props: ['notes']
 }
 </script>

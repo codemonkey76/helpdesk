@@ -30,6 +30,9 @@ Broadcast::channel('App.Models.Message.{id}', function ($user, $id) {
    return (int) $user->id === (int) $id;
 });
 
+Broadcast::channel('App.Models.Organization.{id}.Notes', function ($user, $id) {
+    return true;
+});
 Broadcast::channel('messaging', function ($user) {
     return ['id' => $user->id, 'first_name' => $user->first_name, 'last_name' => $user->last_name];
 });

@@ -10,6 +10,7 @@ import global from './modules/global';
 import messages from './modules/messages';
 import notifications from './modules/notifications';
 import organizations from './modules/organizations';
+import organizationNotes from './modules/organizationNotes';
 import tickets from './modules/tickets';
 import users from './modules/users';
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
         messages,
         notifications,
         organizations,
+        organizationNotes,
         tickets,
         users,
     },

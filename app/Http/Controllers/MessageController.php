@@ -27,6 +27,10 @@ class MessageController extends Controller
             now()->addDay(),
             fn() => $messages->paginate(10));
     }
+    public function show(Message $message)
+    {
+        return $message;
+    }
 
     public function store(Request $request)
     {

@@ -36,10 +36,10 @@ export default {
     },
     watch: {
         messages() {
-            // this.showMessage(this.$route);
+            this.showMessage(this.$route);
         },
         $route(to, from) {
-            // this.showMessage(to);
+            this.showMessage(to);
         }
     },
     methods: {
@@ -67,25 +67,29 @@ export default {
                 if (route.params.hasOwnProperty('pathMatch')) return route.params.pathMatch.substring(1);
             return null;
         },
-        // showMessage(to) {
-        //     if (!this.messages.length) return;
-        //
-        //     let id = this.messageId(to);
-        //
-        //     if (!id) return;
-        //
-        //     let message = this.messages.find(x => x.id === parseInt(id));
-        //
-        //     if (!message) {
-        //         this.$toast.open({
-        //             message: 'Could not find message: ' + to.params.id,
-        //             type: 'error'
-        //         });
-        //         return;
-        //     }
-        //
-        //     this.$refs.viewMessage.show(message);
-        // }
+        showMessage(to) {
+            // Get message from existing data
+            let id = this.messageId(to);
+
+            if (!id) return;
+
+            let message = this.messages.data.find(x => x.id === parseInt(id));
+            if (message) {
+                this.$refs.viewMessage.show(message);
+                return;
+            }
+            // if not found get from api call
+
+            axios.get('/api/messages/' + id)
+                .then(response => {
+                    this.$refs.viewMessage.show(response.data);
+                }).catch(error => {
+                this.$toast.open({
+                    message: 'Could not find message: ' + to.params.id,
+                    type: 'error'
+                });
+            });
+        }
     },
     computed: {
         ...mapGetters('messages', ['messages'])

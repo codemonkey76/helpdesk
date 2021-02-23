@@ -22,7 +22,7 @@
 <script>
 export default {
     name: "SearchBar",
-    props: ['placeholder', 'action'],
+    props: ['placeholder', 'action', 'options'],
     data() {
         return {
             query: ''
@@ -37,7 +37,7 @@ export default {
     },
     methods: {
         search() {
-            this.$store.dispatch(this.action, this.query);
+            this.$store.dispatch(this.action, {...this.options, query: this.query});
         }
     }
 }

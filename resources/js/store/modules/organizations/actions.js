@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
     GET_ORGANIZATIONS({commit}) {
         return axios.get('/api/organizations')
@@ -7,5 +9,5 @@ export default {
     },
     CREATE_ORGANIZATION({commit}) {
         return axios.post('/api/organizations')
-    }
+    },
 };

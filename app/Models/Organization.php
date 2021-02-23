@@ -17,6 +17,10 @@ class Organization extends Model
     {
         return $this->hasOne(Company::class);
     }
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
     //</editor-fold>
 
     //<editor-fold desc="Attributes">
