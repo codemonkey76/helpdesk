@@ -1,6 +1,7 @@
 <template>
     <div class="flex flex-col flex-1 focus:outline-none" tabindex="0">
-        <action-bar :search="true" :placeholder="searchText" :action="searchAction" :options="searchOptions"></action-bar>
+        <action-bar :search="true" :placeholder="searchText" :action="searchAction"
+                    :options="searchOptions"></action-bar>
         <main class="flex flex-col flex-1 relative overflow-hidden">
             <page-header @action="createOrganizationDialog" :action-enabled="true"
                          action-label="Create Organization"></page-header>
@@ -13,7 +14,10 @@
             <div v-else class="flex flex-col max-w-6xl mx-auto p-6 sm:px-6 overflow-hidden">
                 <template v-if="organization">
                     <div>
-                        <router-link to="/organizations" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"><i class="fas fa-chevron-circle-left mr-2"></i> Back</router-link>
+                        <router-link to="/organizations"
+                                     class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                            <i class="fas fa-chevron-circle-left mr-2"></i> Back
+                        </router-link>
                     </div>
                     <div class="mt-2 pb-5 border-b border-gray-200"> <!-- Organization Name -->
                         <h3 class="text-lg leading-6 font-medium text-gray-900" v-text="organization.name"/>
@@ -42,7 +46,7 @@
 
 
                     <div class="mt-4">
-                        <button  @click="createNote" type="button"
+                        <button @click="createNote" type="button"
                                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                             Add Note
                         </button>
@@ -55,7 +59,7 @@
     </div>
 </template>
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
     data() {
@@ -92,14 +96,17 @@ export default {
         organization() {
             return this.organizations.find(x => x.id === +this.organizationId);
         },
+        noteSearchChannel() {
+            return `User.${window.Laravel.user_id}.Organization.${this.organizationId}.Notes.Search`;
+        },
         noteChannel() {
-            return 'App.Models.Organization.' + this.organizationId + '.Notes';
+            return 'Organization.' + this.organizationId + '.Notes';
         }
 
     },
     watch: {
         organizationId: {
-            handler: function(search) {
+            handler: function (search) {
                 this.fetchData(this.page);
             },
             deep: true,
@@ -108,15 +115,19 @@ export default {
     },
     beforeDestroy() {
         window.Echo.private(this.noteChannel).stopListening('NoteCreatedEvent');
+        window.Echo.private(this.noteSearchChannel).stopListening('SearchOrganizationNotesResultsEvent');
     },
     methods: {
         ...mapActions('organizationNotes', ['GET_PAGINATED_NOTES']),
+        ...mapMutations('organizationNotes', ['SET_NOTES']),
         fetchData(page) {
             this.page = page;
             if (this.organizationId) {
                 window.Echo.private(this.noteChannel).stopListening('NoteCreatedEvent');
+                window.Echo.private(this.noteSearchChannel).stopListening('SearchOrganizationNotesResultsEvent');
                 this.GET_PAGINATED_NOTES({orgId: this.organizationId, page: this.page});
                 window.Echo.private(this.noteChannel).listen('NoteCreatedEvent', this.newNote);
+                window.Echo.private(this.noteSearchChannel).listen('SearchOrganizationNotesResultsEvent', this.newNoteSearchResults);
                 console.log("Adding listener on " + this.noteChannel);
             }
         },
@@ -128,6 +139,10 @@ export default {
         },
         createNote() {
             this.$refs.createNote.show();
+        },
+        newNoteSearchResults(e) {
+            this.$toast.open({message: 'Note search results received', type: 'info'});
+            this.SET_NOTES(e.results);
         },
         newNote() {
             console.log("Received NoteCreatedEvent, fetching data");

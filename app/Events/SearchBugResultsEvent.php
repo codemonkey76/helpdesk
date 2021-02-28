@@ -37,6 +37,6 @@ class SearchBugResultsEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel("App.Models.User.$this->user.SearchResults");
+        return new Channel("User.{$this->user}.Bugs.Search");
     }
 }

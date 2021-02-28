@@ -35,12 +35,12 @@ class MessageCreatedEvent implements ShouldBroadcast
     {
         if ($this->message->from_user_id === $this->message->to_user_id) {
 
-            return new PrivateChannel('App.Models.Message.' . $this->message->from_user_id);
+            return new PrivateChannel('User.' . $this->message->from_user_id);
         }
 
         return [
-            new PrivateChannel('App.Models.Message.' . $this->message->from_user_id),
-            new PrivateChannel('App.Models.Message.' . $this->message->to_user_id),
+            new PrivateChannel('User.' . $this->message->from_user_id),
+            new PrivateChannel('User.' . $this->message->to_user_id),
         ];
     }
 }

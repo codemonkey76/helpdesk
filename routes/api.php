@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageSearchController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationNotesController;
+use App\Http\Controllers\OrganizationNotesSearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/organizations/{organization}/notes', [OrganizationNotesController::class, 'store']);
     Route::get('/organizations/{organization}/notes', [OrganizationNotesController::class, 'index']);
 
+    // Organization Notes Search routes
+//    Route::get('/organizations/{organization}/notes/search', [OrganizationNotesSearchController::class, 'index']);
 
     // Company routes
     Route::get('/companies', [CompanyController::class, 'index']);

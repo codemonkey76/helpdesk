@@ -21,6 +21,6 @@ export default {
         let params = {
             query: payload.query
         };
-        return axios.get('/api/organizations/' + payload.orgId + '/notes/search', {params});
+        return axios.get('/api/organizations/' + payload.orgId + '/notes', {params});
     },
 };

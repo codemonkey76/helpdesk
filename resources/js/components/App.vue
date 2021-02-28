@@ -64,14 +64,9 @@ export default {
             this.$toast.open(user.first_name + ' just logged out');
         },
         setupEchoListeners() {
-            window.Echo.channel('global-notifications')
-                .listen('GlobalNotification', this.globalNotification);
-            // window.Echo.channel('App.Models.User.' + window.Laravel.user_id + '.SearchResults')
-            //     .listen('SearchMessageResultsEvent', this.searchMessageResults)
-            //     .listen('SearchBugResultsEvent', this.searchBugResults)
-            window.Echo.private('App.Models.User.' + window.Laravel.user_id).notification(this.userNotification);
-
-            window.Echo.private('App.Models.User.' + window.Laravel.user_id).listen('UserUpdatedEvent', this.userUpdated);
+            window.Echo.channel('Global').listen('GlobalNotification', this.globalNotification);
+            window.Echo.private('User.' + window.Laravel.user_id).notification(this.userNotification);
+            window.Echo.private('User.' + window.Laravel.user_id).listen('UserUpdatedEvent', this.userUpdated);
 
             window.Echo.join('messaging')
                 .here(this.SET_ONLINE_USERS)

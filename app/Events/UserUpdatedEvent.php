@@ -35,6 +35,6 @@ class UserUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('App.Models.User.' . $this->user->id);
+        return new PrivateChannel("User.{$this->user->id}");
     }
 }

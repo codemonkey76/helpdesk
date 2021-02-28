@@ -34,7 +34,7 @@ class NoteCreatedEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         if ($this->note->noteable_type === 'organization') {
-            return new PrivateChannel('App.Models.Organization.' . $this->note->noteable_id . '.Notes');
+            return new PrivateChannel("Organization.{$this->note->noteable_id}.Notes");
         }
     }
 }

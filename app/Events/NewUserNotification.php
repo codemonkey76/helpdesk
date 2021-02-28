@@ -42,6 +42,6 @@ class NewUserNotification implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user-notifications.' . $this->user);
+        return new PrivateChannel('User.' . $this->user);
     }
 }

@@ -38,6 +38,6 @@ class GlobalNotification implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('global-notifications');
+        return new Channel('Global');
     }
 }
