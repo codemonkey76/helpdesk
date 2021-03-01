@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CollectionHelper;
 use App\Events\NoteCreatedEvent;
+use App\Events\NoteUpdatedEvent;
 use App\Events\SearchOrganizationNotesResultsEvent;
 use App\Models\Note;
 use App\Models\Organization;
@@ -75,5 +76,18 @@ class OrganizationNotesController extends Controller
             ->remember($this->getCacheKey($organization, $request),
                 now()->addDay(),
                 fn() => $organization->notes()->latest()->paginate(10));
+    }
+
+    public function update(Organization $organization, Note $note, Request $request)
+    {
+        dump($request->all());
+
+        $validated = $request->validate([
+            'note' => 'required'
+        ]);
+
+        $note->update($validated);
+        event(new NoteUpdatedEvent($note));
+        return response()->json('ok');
     }
 }

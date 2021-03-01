@@ -54,9 +54,7 @@ Route::middleware('auth:api')->group(function () {
     // Organization Notes routes
     Route::post('/organizations/{organization}/notes', [OrganizationNotesController::class, 'store']);
     Route::get('/organizations/{organization}/notes', [OrganizationNotesController::class, 'index']);
-
-    // Organization Notes Search routes
-//    Route::get('/organizations/{organization}/notes/search', [OrganizationNotesSearchController::class, 'index']);
+    Route::patch('/organizations/{organization}/notes/{note}', [OrganizationNotesController::class, 'update']);
 
     // Company routes
     Route::get('/companies', [CompanyController::class, 'index']);

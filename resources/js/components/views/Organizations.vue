@@ -40,7 +40,7 @@
                         <label class="block text-sm font-medium text-gray-700">
                             Notes
                         </label>
-                        <organization-notes :notes="notes"></organization-notes>
+                        <organization-notes @edit-note="editNote" :notes="notes"></organization-notes>
                     </div>
                     <paginator @page-change="fetchData" :items="notes"></paginator>
 
@@ -51,7 +51,9 @@
                             Add Note
                         </button>
                     </div>
-                    <note-create ref="createNote"></note-create>
+                    <note-create ref="createNote" action="organizationNotes/ADD_NOTE" title="Add Note"></note-create>
+                    <note-create ref="editNote" action="organizationNotes/UPDATE_NOTE" title="Edit Note"></note-create>
+
                 </template>
             </div>
             <organization-create ref="createOrganization"/>
@@ -124,9 +126,11 @@ export default {
             this.page = page;
             if (this.organizationId) {
                 window.Echo.private(this.noteChannel).stopListening('NoteCreatedEvent');
+                window.Echo.private(this.noteChannel).stopListening('NoteUpdatedEvent');
                 window.Echo.private(this.noteSearchChannel).stopListening('SearchOrganizationNotesResultsEvent');
                 this.GET_PAGINATED_NOTES({orgId: this.organizationId, page: this.page});
                 window.Echo.private(this.noteChannel).listen('NoteCreatedEvent', this.newNote);
+                window.Echo.private(this.noteChannel).listen('NoteUpdatedEvent', this.newNote);
                 window.Echo.private(this.noteSearchChannel).listen('SearchOrganizationNotesResultsEvent', this.newNoteSearchResults);
                 console.log("Adding listener on " + this.noteChannel);
             }
@@ -138,7 +142,10 @@ export default {
             this.$refs.viewOrganization.show(organization);
         },
         createNote() {
-            this.$refs.createNote.show();
+            this.$refs.createNote.show({orgId: this.organizationId});
+        },
+        editNote(payload) {
+            this.$refs.editNote.show({orgId: this.organizationId, noteId: payload.id, content: payload.note});
         },
         newNoteSearchResults(e) {
             this.$toast.open({message: 'Note search results received', type: 'info'});
