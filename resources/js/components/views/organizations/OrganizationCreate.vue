@@ -15,9 +15,8 @@
     </create-form>
 </template>
 <script>
-
+import { mapActions } from 'vuex';
 export default {
-
     data() {
         return {
             showForm: false,
@@ -25,6 +24,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions('organizations', ['CREATE_ORGANIZATION']),
         show() {
             this.showForm = true;
         },

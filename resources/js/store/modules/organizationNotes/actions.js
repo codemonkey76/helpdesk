@@ -30,6 +30,9 @@ export default {
                 commit('SET_NOTES', response.data);
             });
     },
+    DELETE_NOTE({commit}, payload) {
+        return axios.delete(`/api/organizations/${payload.orgId}/notes/${payload.id}`)
+    },
     SEARCH_NOTES({commit}, payload) {
 
         let params = {

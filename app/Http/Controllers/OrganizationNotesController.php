@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CollectionHelper;
 use App\Events\NoteCreatedEvent;
+use App\Events\NoteDeletedEvent;
 use App\Events\NoteUpdatedEvent;
 use App\Events\SearchOrganizationNotesResultsEvent;
 use App\Models\Note;
@@ -11,6 +12,7 @@ use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class OrganizationNotesController extends Controller
 {
@@ -80,14 +82,24 @@ class OrganizationNotesController extends Controller
 
     public function update(Organization $organization, Note $note, Request $request)
     {
-        dump($request->all());
-
         $validated = $request->validate([
             'note' => 'required'
         ]);
 
         $note->update($validated);
         event(new NoteUpdatedEvent($note));
+
         return response()->json('ok');
+    }
+    public function destroy(Organization $organization, Note $note)
+    {
+        event(new NoteDeletedEvent($note));
+
+        $note->delete();
+        Log::info('Deleted note, firing NoteDeletedEvent');
+
+
+        return response()->json('ok');
+
     }
 }

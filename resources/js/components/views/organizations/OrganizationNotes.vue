@@ -9,7 +9,7 @@
                     <button title="Edit note" @click="editNote({id: note.id, note: note.note})"
                         class="h-6 w-6 flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-yellow-500">
                         <i class="fas fa-pencil fa-xs"></i></button>
-                    <button title="Delete note"
+                    <button title="Delete note" @click="deleteNote({id: note.id, orgId: note.noteable_id})"
                         class="h-6 w-6 flex items-center justify-center ml-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-red-500">
                         <i class="fas fa-trash fa-xs"></i></button>
                 </div>
@@ -23,6 +23,9 @@ export default {
     methods: {
         editNote(payload) {
             this.$emit('edit-note', payload);
+        },
+        deleteNote(payload) {
+            this.$emit('delete-note', payload);
         }
     }
 }

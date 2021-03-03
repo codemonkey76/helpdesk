@@ -40,7 +40,7 @@
                         <label class="block text-sm font-medium text-gray-700">
                             Notes
                         </label>
-                        <organization-notes @edit-note="editNote" :notes="notes"></organization-notes>
+                        <organization-notes @edit-note="editNote" @delete-note="deleteNote" :notes="notes"></organization-notes>
                     </div>
                     <paginator @page-change="fetchData" :items="notes"></paginator>
 
@@ -62,6 +62,7 @@
 </template>
 <script>
 import {mapGetters, mapActions, mapMutations} from 'vuex';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -119,18 +120,23 @@ export default {
         window.Echo.private(this.noteChannel).stopListening('NoteCreatedEvent');
         window.Echo.private(this.noteSearchChannel).stopListening('SearchOrganizationNotesResultsEvent');
     },
+    mounted() {
+        window.Echo.private(this.organizationsChannel).listen('OrganizationCreatedEvent', this.)
+    },
     methods: {
-        ...mapActions('organizationNotes', ['GET_PAGINATED_NOTES']),
+        ...mapActions('organizationNotes', ['GET_PAGINATED_NOTES', 'DELETE_NOTE']),
         ...mapMutations('organizationNotes', ['SET_NOTES']),
         fetchData(page) {
             this.page = page;
             if (this.organizationId) {
                 window.Echo.private(this.noteChannel).stopListening('NoteCreatedEvent');
                 window.Echo.private(this.noteChannel).stopListening('NoteUpdatedEvent');
+                window.Echo.private(this.noteChannel).stopListening('NoteDeletedEvent');
                 window.Echo.private(this.noteSearchChannel).stopListening('SearchOrganizationNotesResultsEvent');
                 this.GET_PAGINATED_NOTES({orgId: this.organizationId, page: this.page});
                 window.Echo.private(this.noteChannel).listen('NoteCreatedEvent', this.newNote);
                 window.Echo.private(this.noteChannel).listen('NoteUpdatedEvent', this.newNote);
+                window.Echo.private(this.noteChannel).listen('NoteDeletedEvent', this.noteDeleted);
                 window.Echo.private(this.noteSearchChannel).listen('SearchOrganizationNotesResultsEvent', this.newNoteSearchResults);
                 console.log("Adding listener on " + this.noteChannel);
             }
@@ -147,6 +153,26 @@ export default {
         editNote(payload) {
             this.$refs.editNote.show({orgId: this.organizationId, noteId: payload.id, content: payload.note});
         },
+        deleteNote(payload) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.DELETE_NOTE(payload)
+                    Swal.fire(
+                        'Deleted!',
+                        'Note has been deleted.',
+                        'success'
+                    )
+                }
+            });
+        },
         newNoteSearchResults(e) {
             this.$toast.open({message: 'Note search results received', type: 'info'});
             this.SET_NOTES(e.results);
@@ -156,6 +182,10 @@ export default {
             if (this.organizationId) {
                 this.GET_PAGINATED_NOTES({orgId: this.organizationId, page: this.page});
             }
+        },
+        noteDeleted() {
+            console.log("Received NoteDeletedEvent");
+            this.newNote();
         }
     }
 }

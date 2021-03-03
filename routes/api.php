@@ -55,7 +55,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/organizations/{organization}/notes', [OrganizationNotesController::class, 'store']);
     Route::get('/organizations/{organization}/notes', [OrganizationNotesController::class, 'index']);
     Route::patch('/organizations/{organization}/notes/{note}', [OrganizationNotesController::class, 'update']);
-
+    Route::delete('/organizations/{organization}/notes/{note}', [OrganizationNotesController::class, 'destroy']);
     // Company routes
     Route::get('/companies', [CompanyController::class, 'index']);
 
