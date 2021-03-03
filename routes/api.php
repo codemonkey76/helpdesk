@@ -10,7 +10,7 @@ use App\Http\Controllers\MessageSearchController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationNotesController;
-use App\Http\Controllers\OrganizationNotesSearchController;
+use App\Http\Controllers\ClickToCallController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,4 +58,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Company routes
     Route::get('/companies', [CompanyController::class, 'index']);
+
+    // Click to Call
+    Route::post('/click-to-call', [ClickToCallController::class, 'call']);
 });
